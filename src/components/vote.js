@@ -20,27 +20,11 @@ class Vote extends Component {
         console.log(id)
 
         return (<div>
-                    {/*<Button animated onClick={this.onUpVote.bind(this)}>
-                        <Button.Content visible>
-                            <Icon name='thumbs outline up'/>
-                        </Button.Content>
-                        <Button.Content hidden>
-                            <small>Up vote</small>
-                        </Button.Content>
-                    </Button>*/}
                     <Icon name='thumbs outline up' style={{cursor : 'pointer'}} onClick={this.onUpVote.bind(this)}/>
                     <Button className="btn btn-outline-primary">
                         Votes <span className="badge badge-pill badge-primary ">{voteScore}</span>
                     </Button>
                     <Icon name='thumbs outline down' style={{cursor : 'pointer'}} onClick={this.onDownVote.bind(this)}/>
-                    {/*<Button animated  onClick={this.onDownVote.bind(this)}>
-                        <Button.Content visible>
-                            <Icon name='thumbs outline up'/>
-                        </Button.Content>
-                        <Button.Content hidden>
-                            <small>Down Vote</small>
-                        </Button.Content>
-                    </Button>                    */}
                 </div>);
     }
 }
