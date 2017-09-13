@@ -1,16 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './components/posts_view';
+import RootView from './components/root_view';
 import PostNew from './components/post_new';
 import PostView from './components/post_view';
 import PostComment from './components/post_comment';
-
 import { createStore, applyMiddleware } from 'redux'
 import reducer from './reducers/index'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-// import ReduxPromise from 'redux-promise';
 import ReduxThunk from 'redux-thunk';
 
 import registerServiceWorker from './registerServiceWorker';
@@ -31,12 +28,12 @@ ReactDOM.render(
         <BrowserRouter>
             <div>
                 <Switch>
+                    <Route path='/posts/category/:category' component={PostNew}/>
                     <Route path='/posts/:id' component={PostNew}/>
-                    <Route path='/posts' component={PostNew}/>
                     <Route path='/comments/:id/' component={PostComment}/>
                     <Route path='/:category/:id' component={PostView}/>
-                    <Route path='/:category' component={App}/>
-                    <Route path='/' component={App}/>
+                    <Route path='/:category' component={RootView}/>
+                    <Route path='/' component={RootView}/>
                 </Switch>
             </div>
         </BrowserRouter>

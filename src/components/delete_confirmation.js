@@ -2,7 +2,7 @@ import React from 'react'
 import { Icon, Button, Modal } from 'semantic-ui-react'
 import { connect } from 'react-redux';
 import { setConfirmationStatus } from '../actions'
-import './App.css';
+import '../App.css';
 
   const DeleteConfirmation = ({setConfirmationStatus, open, id, description, onClick}) => {
     const key = `${description}@${id}`;

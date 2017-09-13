@@ -1,4 +1,3 @@
-// import React from 'react';
 import React from 'react';
 import { List, Icon } from 'semantic-ui-react'
 import DeleteConfirmation from './delete_confirmation';

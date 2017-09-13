@@ -9,8 +9,7 @@ import { Container, Segment, Dropdown } from 'semantic-ui-react'
 
 class PostNew extends Component {
     componentDidMount() {
-        const selectedCategory = this.props.selectedCategory;
-        const post = this.props.post;
+        const {selectedCategory, initialize, post }  = this.props;
         let initData = {};
         if (typeof post === 'undefined' && selectedCategory !== 'all') {
             initData = {category : selectedCategory};
@@ -18,7 +17,7 @@ class PostNew extends Component {
         else {
             initData = post;
         }
-        this.props.initialize(initData);
+        initialize(initData);
     }
     renderField(field) {
         const { meta: {touched, error} } = field;
@@ -64,25 +63,26 @@ class PostNew extends Component {
     }
        
     onSubmit(values) {
-        const post = {
+        const { history, editPost, createPost, selectedCategory, post } = this.props;
+        const newPost = {
             ...values,
             id : guid(),
             timestamp : `${Date.now()}`,
         }
         console.log(post);
-        const oldPost = this.props.post;
+        const oldPost = post;
         if (typeof oldPost === 'undefined') {
-            this.props.createPost(post);
-            this.props.history.push('/');
+            createPost(newPost);
+            history.push(selectedCategory === 'all' ? '/' : `/${selectedCategory}`);
         }
         else {
-            this.props.editPost({...post, id : oldPost.id});
-            this.props.history.push(`/post/${oldPost.id}`);
+            editPost({...newPost, id : oldPost.id});
+            history.push(`/post/${oldPost.id}`);
         }
 
     }
     render() {
-        const { handleSubmit, options,  post } = this.props;
+        const { handleSubmit, options,  post, selectedCategory } = this.props;
         return (
             <Container>
                 <h2>{post ? 'Edit ' : 'Create a new ' } Post</h2>
@@ -110,7 +110,7 @@ class PostNew extends Component {
                             component={this.renderField}
                         />
                         <button type="submit" className="btn btn-primary">Save</button>
-                        <Link to={post ? `/post/${post.id}` : '/'} className="btn btn-danger ">Cancel</Link>
+                        <Link to={post ? `/post/${post.id}` : selectedCategory === 'all' ? '/' : `/${selectedCategory}`} className="btn btn-danger ">Cancel</Link>
                     </form>
                 </Segment>
             </Container>
@@ -137,8 +137,12 @@ function validate(values) {
 }
 function mapStateToProps(state, ownProps) {
     const id = ownProps.match.params.id;
-    
-    return {post : state.posts[id], options : state.categories, selectedCategory : state.selectedCategory};
+    let category = ownProps.match.params.category;
+    console.log('post new mapStateToProps id',id)
+    console.log('post new mapStateToProps category',category)
+    category = typeof category === 'undefined' ? 'all' : category;
+       
+    return {post : state.posts[id], options : state.categories, selectedCategory : category};
 }
 export default reduxForm({
     validate,

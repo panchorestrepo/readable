@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import './App.css';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchPosts, toggleSortPosts, deletePost, getCategories } from '../actions';
@@ -10,14 +9,15 @@ import Vote from './vote';
 import AddSort from './add_sort';
 import { Container, Header, Segment, List, Dropdown } from 'semantic-ui-react';
 
-class App extends Component {
+class RootView extends Component {
 
   onClickToggleSort() {
     this.props.toggleSortPosts();
   }
 
   onClickAddPost() {
-    this.props.history.push('/posts');
+    const category = this.props.category;
+    this.props.history.push(`/posts/category/${category}`);
   }
   onDeleteClick(post) {
       const { id } = post;
@@ -84,4 +84,4 @@ function mapStateToProps(state, ownProps) {
  const filteredPost = posts.filter((post) =>  category === 'all' ? true : post.category === category );
  return { posts : filteredPost , comments : state.comments, sortField , options, category};
 }
-export default connect(mapStateToProps,{ fetchPosts,toggleSortPosts, deletePost, getCategories })(App);
+export default connect(mapStateToProps,{ fetchPosts,toggleSortPosts, deletePost, getCategories })(RootView);
