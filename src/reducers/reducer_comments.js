@@ -5,7 +5,8 @@ const updateComments = (action, state, update) => {
   const parentId = comment.parentId;
   const comments = state[parentId]; 
   const filteredComments = comments.filter((c) => c.id !== comment.id );
-  return update ? filteredComments.concat(comment) : filteredComments;
+  const newComments = update ? filteredComments.concat(comment) : filteredComments;
+  return {[parentId] :newComments }
 }
 
 export default function(state = {}, action) {
@@ -15,7 +16,7 @@ export default function(state = {}, action) {
         return {...state, [action.parentId]: comments};
        }
        case VOTE_COMMENT: {
-        return {...state, [parentId] : updateComments(action, state, true)};  
+        return {...state, ...updateComments(action, state, true)};  
        }
        case CREATE_COMMENT: {
         const comment = action.payload;
@@ -23,10 +24,10 @@ export default function(state = {}, action) {
         return {...state, [parentId] : state[parentId].concat(comment)};
        }
        case EDIT_COMMENT: {
-        return {...state, [parentId] : updateComments(action, state, true)};  
+        return {...state, ...updateComments(action, state, true)};  
        }
        case DELETE_COMMENT: {
-        return {...state, [parentId] : updateComments(action, state, false)};  
+        return {...state, ...updateComments(action, state, false)};  
        }
        case INIT_COMMENTS: {
         console.log('init comments pid',action.pid)

@@ -177,7 +177,7 @@ export function editComment(comment) {
 }
 
 export function deleteComment(comment) {
-  const{ parentId, id } = comment;
+  const{ id } = comment;
   return dispatch => {
     fetch(`${api}/comments/${id}`,{
        method: 'DELETE',
