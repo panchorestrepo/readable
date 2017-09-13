@@ -5,16 +5,16 @@ export const CREATE_POST = 'create_post';
 export const EDIT_POST = 'edit_post';
 export const DELETE_POST = 'delete_post';
 export const FETCH_POST = 'fetch_post';
+export const VOTE_POST = "vote_posts";
+export const TOGGLE_SORT_POSTS = "toggle_sort_posts";
 export const CREATE_COMMENT = 'create_comment';
 export const FETCH_COMMENTS = 'fetch_comments';
-export const VOTE_POST = "vote_posts";
 export const VOTE_COMMENT = "vote_comments";
-export const TOGGLE_SORT_POSTS = "toggle_sort_posts";
 export const TOGGLE_SORT_COMMENTS = "toggle_sort_comments";
 export const DELETE_COMMENT = 'delete_comment';
 export const EDIT_COMMENT = 'edit_comment';
-export const CONFIRMATION_STATUS = 'confirmation_status';
 export const INIT_COMMENTS = 'init_comments';
+export const CONFIRMATION_STATUS = 'confirmation_status';
 
 const api = "http://localhost:5001"
 
@@ -83,41 +83,6 @@ export function editPost(post) {
   }
 }
 
-export function createComment(values) {
-  return (dispatch) => {
-    fetch(`${api}/comments`, {
-        method: 'POST',
-        headers: {
-          ...headers,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify( values )
-      })
-      .then(res => res.json())
-      .then(response => dispatch({
-          type: CREATE_COMMENT,
-          payload : response
-      }))
-  }
-}
-
-export function editComment(comment) {
-  return dispatch => {
-    fetch(`${api}/comments/${comment.id}`, {
-          method: 'PUT',
-          headers: {
-            ...headers,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify( comment )
-        }).then(res => res.json())
-          .then(response => dispatch({
-            type: EDIT_COMMENT,
-            payload : response            
-          }));
-  }
-}
-
 export function fetchPosts() {
   console.log('fetchPosts started');
   return (dispatch, getState) => {
@@ -176,6 +141,40 @@ export function deletePost(id) {
 
   }
 }
+export function createComment(values) {
+  return (dispatch) => {
+    fetch(`${api}/comments`, {
+        method: 'POST',
+        headers: {
+          ...headers,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify( values )
+      })
+      .then(res => res.json())
+      .then(response => dispatch({
+          type: CREATE_COMMENT,
+          payload : response
+      }))
+  }
+}
+
+export function editComment(comment) {
+  return dispatch => {
+    fetch(`${api}/comments/${comment.id}`, {
+          method: 'PUT',
+          headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify( comment )
+        }).then(res => res.json())
+          .then(response => dispatch({
+            type: EDIT_COMMENT,
+            payload : response            
+          }));
+  }
+}
 
 export function deleteComment(comment) {
   const{ parentId, id } = comment;
@@ -187,11 +186,11 @@ export function deleteComment(comment) {
           'Content-Type': 'application/json'
         }
     })
-    .then(() => {
+    .then(res => res.json())
+    .then((response) => {
       dispatch({
         type: DELETE_COMMENT,
-        payload: id,
-        parentId
+        payload: response,
       })
     })
 
