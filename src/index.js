@@ -14,7 +14,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import ReduxThunk from 'redux-thunk';
 
 import registerServiceWorker from './registerServiceWorker';
-
+import { fetchPosts, getCategories } from './actions';
 
 //const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
@@ -22,6 +22,9 @@ const store = createStore(
     reducer,
     applyMiddleware(ReduxThunk)
 );
+console.log('index.js before dispatch',store.getState());
+store.dispatch(fetchPosts());
+store.dispatch(getCategories());
 
 ReactDOM.render(
     <Provider store={store}>

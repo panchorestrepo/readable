@@ -1,20 +1,19 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Icon, Button, Modal } from 'semantic-ui-react'
+import { connect } from 'react-redux';
+import { setConfirmationStatus } from '../actions'
 import './App.css';
 
-class DeleteConfirmation extends Component {
-  state = { open: false }
-
-  show = size => () => this.setState({ size, open: true })
-  close = () => this.setState({ open: false })
-
-  render() {
-    const { open, size } = this.state
-    const description = this.props.description;
+  const DeleteConfirmation = ({setConfirmationStatus, open, id, description, onClick}) => {
+    const key = `${description}@${id}`;
+    console.log('delete confirmation key open',key,open)
+    const show = () => setConfirmationStatus(key,true);
+    const close = () => setConfirmationStatus(key,false)
+  
     return (
       <div>
-        <Icon name='trash outline' style={{cursor: 'pointer'}} onClick={this.show('mini')}/>
-        <Modal size={size} open={open} onClose={this.close} dimmer={false}>
+        <Icon name='trash outline' style={{cursor: 'pointer'}} onClick={show}/>
+        <Modal size={'mini'} open={open} onClose={close} dimmer={false}>
           <Modal.Header>
             Delete {description}
           </Modal.Header>
@@ -22,15 +21,21 @@ class DeleteConfirmation extends Component {
             <p>Are you sure you want to delete this {description}</p>
           </Modal.Content>
           <Modal.Actions>
-            <Button primary onClick={() =>this.setState({ open: false })}>
+            <Button primary onClick={close}>
               No
             </Button>
-            <Button negative icon='checkmark' labelPosition='right' content='Yes' onClick={() => {this.props.onClick();this.setState({ open: false }) }} />
+            <Button negative icon='checkmark' labelPosition='right' content='Yes' onClick={() => {onClick();close()}} />
           </Modal.Actions>
         </Modal>
       </div>
     )
-  }
 }
 
-export default DeleteConfirmation
+function mapStateToProps({ confirmationStatus},ownProps ) {
+  console.log("mapStateToProps DeleteConfirmation:",confirmationStatus,ownProps)
+  const { id, description } = ownProps;
+  const key = `${description}@${id}`;
+  return { open : confirmationStatus[key] }
+}
+
+export default connect(mapStateToProps,{ setConfirmationStatus })(DeleteConfirmation);

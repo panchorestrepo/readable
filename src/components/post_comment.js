@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createComment, editComment } from '../actions';
 import { guid } from '../util/Utils';
-import { Container } from 'semantic-ui-react';
+import { Container, Segment } from 'semantic-ui-react';
 
 class PostComment extends Component {
     componentDidMount() {
@@ -51,20 +51,22 @@ class PostComment extends Component {
         return (
             <Container>
                 <h2>{comment ? 'Edit ' : 'Create a new ' } Comment</h2>
-                <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-                    <Field
-                        label="Author"
-                        name="author"
-                        component={this.renderField}
-                    />
-                    <Field
-                        label="Comment"
-                        name="body"
-                        component={this.renderField}
-                    />
-                    <button type="submit" className="btn btn-primary">Save</button>
-                    <Link to={`/post/${parentId}`} className="btn btn-danger ">Cancel</Link>
-                </form>
+                <Segment>
+                    <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+                        <Field
+                            label="Author"
+                            name="author"
+                            component={this.renderField}
+                        />
+                        <Field
+                            label="Comment"
+                            name="body"
+                            component={this.renderField}
+                        />
+                        <button type="submit" className="btn btn-primary">Save</button>
+                        <Link to={`/post/${parentId}`} className="btn btn-danger ">Cancel</Link>
+                    </form>
+                </Segment>
             </Container>
         );
     }

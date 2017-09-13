@@ -1,4 +1,4 @@
-import { FETCH_COMMENTS, VOTE_COMMENT, CREATE_COMMENT, EDIT_COMMENT, DELETE_COMMENT} from '../actions';
+import { FETCH_COMMENTS, VOTE_COMMENT, CREATE_COMMENT, EDIT_COMMENT, DELETE_COMMENT, INIT_COMMENTS} from '../actions';
 
 export default function(state = {}, action) {
    switch (action.type) {
@@ -23,7 +23,10 @@ export default function(state = {}, action) {
        case DELETE_COMMENT:
         const cpid = action.parentId;
         const filterComents2 = state[cpid].filter((comment) => comment.id !== action.payload );
-        return {...state, [cpid] : filterComents2}; 
+        return {...state, [cpid] : filterComents2};
+       case INIT_COMMENTS:
+        console.log('init comments pid',action.pid)
+        return {...state, [action.pid] : []} 
        default:
         return state;
    } 

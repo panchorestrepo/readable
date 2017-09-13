@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createPost, editPost } from '../actions';
 import { guid } from '../util/Utils';
-import { Container, Dropdown } from 'semantic-ui-react'
+import { Container, Segment, Dropdown } from 'semantic-ui-react'
 
 
 class PostNew extends Component {
@@ -86,31 +86,33 @@ class PostNew extends Component {
         return (
             <Container>
                 <h2>{post ? 'Edit ' : 'Create a new ' } Post</h2>
-                <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-                    <Field
-                        label="Title for Post"
-                        name="title"
-                        component={this.renderField}
-                    />
-                    <Field
-                        label="Author"
-                        name="author"
-                        component={this.renderField}
-                    />
-                    <Field
-                        label="Category"
-                        name="category"
-                        options={options}
-                        component={this.renderCategory.bind(this)}
-                    />
-                    <Field
-                        label="Post Content"
-                        name="body"
-                        component={this.renderField}
-                    />
-                    <button type="submit" className="btn btn-primary">Save</button>
-                    <Link to={post ? `/post/${post.id}` : '/'} className="btn btn-danger ">Cancel</Link>
-                </form>
+                <Segment>
+                    <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+                        <Field
+                            label="Title for Post"
+                            name="title"
+                            component={this.renderField}
+                        />
+                        <Field
+                            label="Author"
+                            name="author"
+                            component={this.renderField}
+                        />
+                        <Field
+                            label="Category"
+                            name="category"
+                            options={options}
+                            component={this.renderCategory.bind(this)}
+                        />
+                        <Field
+                            label="Post Content"
+                            name="body"
+                            component={this.renderField}
+                        />
+                        <button type="submit" className="btn btn-primary">Save</button>
+                        <Link to={post ? `/post/${post.id}` : '/'} className="btn btn-danger ">Cancel</Link>
+                    </form>
+                </Segment>
             </Container>
         );
     }

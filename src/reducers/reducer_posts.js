@@ -15,7 +15,8 @@ export default function(state = {}, action) {
         const posts = _.mapKeys(filterPosts,'id');
         return {...posts};
        case CREATE_POST:
-        return state;
+        console.log('create post',action)
+        return {...state, [action.payload.id] : action.payload};
        case EDIT_POST:
         const postId = action.payload.id;
         return {...state, [postId] : action.payload};

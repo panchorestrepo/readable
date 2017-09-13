@@ -11,15 +11,6 @@ import AddSort from './add_sort';
 import { Container, Header, Segment, List, Dropdown } from 'semantic-ui-react';
 
 class App extends Component {
-  state = {
-    categories : [],
-  }
-
-  componentDidMount() {
-
-    this.props.getCategories();
-    this.props.fetchPosts();
-  }
 
   onClickToggleSort() {
     this.props.toggleSortPosts();

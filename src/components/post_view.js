@@ -2,7 +2,7 @@ import moment from 'moment';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchPost,toggleSortComments,deletePost, deleteComment } from '../actions';
+import {toggleSortComments,deletePost, deleteComment } from '../actions';
 import Vote from './vote';
 import sortBy from "sort-by";
 import AddSort from './add_sort';
@@ -53,15 +53,15 @@ class PostView extends Component {
         comments.sort(sortBy(sortField));
         return (
         <Container>
-
             <h2>
                 <Link to="/"><Icon name='home'/></Link>
-            Post View</h2>
+                Post View
+            </h2>
             <div>
                 <Header attached='top'>
                 <span style={{float : 'left'}}>{post.author}  <small>{moment(parseInt(post.timestamp,10)).calendar()}</small></span>
                 <span style={{float : 'right'}}>
-                    <EditDelete description={'Post'} deleteEntry={() => this.onDeleteClick(post)} editEntry={this.onEditPost.bind(this)}/>
+                    <EditDelete id={post.id} description={'Post'} deleteEntry={() => this.onDeleteClick(post)} editEntry={this.onEditPost.bind(this)}/>
                 </span>      
                 <h2>{post.title}</h2>
                 <span style={{ float: 'right'}}>
@@ -79,7 +79,7 @@ class PostView extends Component {
                             <span style={{float : 'left'}}>{comment.author}  <small>{moment(parseInt(comment.timestamp,10)).calendar()}</small></span>
                             <span className="col-sm"  style={{color : 'black'}}>{comment.body}</span>
                             <span style={{display : 'inline-block'}}>
-                                <EditDelete  description={'Comment'} deleteEntry={() => this.onDeleteComment(comment)} editEntry={() => this.onEditComment(comment)}/>
+                                <EditDelete  id={comment.id} description={'Comment'} deleteEntry={() => this.onDeleteComment(comment)} editEntry={() => this.onEditComment(comment)}/>
                             </span>
                             <span style={{ float: 'right'}}>
                                 <Vote id={comment.id}  type={"comments"} voteScore={comment.voteScore} />
@@ -100,4 +100,4 @@ function mapStateToProps(state, ownProps) {
     const id = ownProps.match.params.id;
     return {post: state.posts[id], comments : state.comments[id], sortField : state.sortBy.comments};
 }
-export default connect(mapStateToProps,{ fetchPost, toggleSortComments,deletePost, deleteComment })(PostView);
+export default connect(mapStateToProps,{ toggleSortComments,deletePost, deleteComment })(PostView);
