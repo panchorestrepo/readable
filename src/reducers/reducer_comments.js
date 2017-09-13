@@ -6,7 +6,7 @@ const updateComments = (action, state, update) => {
   const comments = state[parentId]; 
   const filteredComments = comments.filter((c) => c.id !== comment.id );
   const newComments = update ? filteredComments.concat(comment) : filteredComments;
-  return {[parentId] :newComments }
+  return {[parentId] : newComments }
 }
 
 export default function(state = {}, action) {
@@ -30,7 +30,6 @@ export default function(state = {}, action) {
         return {...state, ...updateComments(action, state, false)};  
        }
        case INIT_COMMENTS: {
-        console.log('init comments pid',action.pid)
         return {...state, [action.pid] : []};
        }
        default:

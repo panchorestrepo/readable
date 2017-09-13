@@ -59,7 +59,7 @@ class PostView extends Component {
             </h2>
             <div>
                 <Header attached='top'>
-                <span style={{float : 'left'}}>{post.author}  <small>{moment(parseInt(post.timestamp,10)).calendar()}</small></span>
+                <span style={{float : 'left'}}>{post.author}  <small>{moment(parseInt(post.timestamp,10)).calendar()}</small>  {post.category}</span>
                 <span style={{float : 'right'}}>
                     <EditDelete id={post.id} description={'Post'} deleteEntry={() => this.onDeleteClick(post)} editEntry={this.onEditPost.bind(this)}/>
                 </span>      
