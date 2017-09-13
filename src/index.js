@@ -34,7 +34,8 @@ ReactDOM.render(
                     <Route path='/posts/:id' component={PostNew}/>
                     <Route path='/posts' component={PostNew}/>
                     <Route path='/comments/:id/' component={PostComment}/>
-                    <Route path='/post/:id' component={PostView}/>
+                    <Route path='/:category/:id' component={PostView}/>
+                    <Route path='/:category' component={App}/>
                     <Route path='/' component={App}/>
                 </Switch>
             </div>

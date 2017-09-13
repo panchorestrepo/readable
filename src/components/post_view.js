@@ -98,6 +98,8 @@ class PostView extends Component {
 function mapStateToProps(state, ownProps) {
     console.log("mapStateToProps post show",state);
     const id = ownProps.match.params.id;
-    return {post: state.posts[id], comments : state.comments[id], sortField : state.sortBy.comments};
+    const comments = typeof state.comments[id] === 'undefined' ? [] : state.comments[id];
+
+    return {post: state.posts[id], comments, sortField : state.sortBy.comments};
 }
 export default connect(mapStateToProps,{ toggleSortComments,deletePost, deleteComment })(PostView);

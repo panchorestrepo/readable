@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchPosts, toggleSortPosts, deletePost, getCategories, selectedCategory } from '../actions';
+import { fetchPosts, toggleSortPosts, deletePost, getCategories } from '../actions';
 import moment from 'moment';
 import sortBy from "sort-by";
 import Vote from './vote';
@@ -26,7 +26,8 @@ class App extends Component {
   }
   onChangeCategory(event, data) {
     console.log('onChangeCategory',data.value);
-    this.props.selectedCategory(data.value);  
+    const category = data.value;
+    this.props.history.push(category === 'all' ? '/': `/${category}`);  
   }
 
 
@@ -52,7 +53,7 @@ class App extends Component {
             <List.Item key={post.id}>
               <List.Content>
                 <List.Header>
-                  <Link to={`/post/${post.id}`}>
+                  <Link to={`/${post.category}/${post.id}`}>
                     <span>{post['title']}</span>
                   </Link>
                 </List.Header>
@@ -72,13 +73,15 @@ class App extends Component {
    );
   }
 }
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
  const sortField = state.sortBy.posts;
  const posts = _.values(state.posts);
  posts.sort(sortBy(sortField));
  const options = state.categories.concat({key : 'all' , value: 'all', text : 'all'});
- const category = state.selectedCategory;
+// const category = state.selectedCategory;
+ let category = ownProps.match.params.category;
+ category = typeof category === 'undefined' ? 'all' : category;
  const filteredPost = posts.filter((post) =>  category === 'all' ? true : post.category === category );
  return { posts : filteredPost , comments : state.comments, sortField , options, category};
 }
-export default connect(mapStateToProps,{ fetchPosts,toggleSortPosts, deletePost, getCategories, selectedCategory })(App);
+export default connect(mapStateToProps,{ fetchPosts,toggleSortPosts, deletePost, getCategories })(App);

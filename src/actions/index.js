@@ -11,7 +11,6 @@ export const VOTE_POST = "vote_posts";
 export const VOTE_COMMENT = "vote_comments";
 export const TOGGLE_SORT_POSTS = "toggle_sort_posts";
 export const TOGGLE_SORT_COMMENTS = "toggle_sort_comments";
-export const SELECTED_CATEGORY = 'selected_category';
 export const DELETE_COMMENT = 'delete_comment';
 export const EDIT_COMMENT = 'edit_comment';
 export const CONFIRMATION_STATUS = 'confirmation_status';
@@ -36,12 +35,6 @@ export function getCategories() {
     }
 }
 
-export function selectedCategory(category) {
-     return {
-        type: SELECTED_CATEGORY,
-        payload : category,
-    }; 
-}
 export function createPost(values) {
   return (dispatch) => {
     fetch(`${api}/posts`, {
@@ -126,15 +119,15 @@ export function editComment(comment) {
 }
 
 export function fetchPosts() {
+  console.log('fetchPosts started');
   return (dispatch, getState) => {
           fetch(`${api}/posts`, { headers })
            .then(res => res.json())
            .then(response => dispatch( dispatchFetchPosts(response)))
            .then(response => {
-             console.log("getState posts",response.payload);
+             console.log("getState comments",response.payload);
              getComments(dispatch,response.payload,0);
             });
-            
   }
 }
 
