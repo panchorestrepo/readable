@@ -1,32 +1,37 @@
 import { FETCH_COMMENTS, VOTE_COMMENT, CREATE_COMMENT, EDIT_COMMENT, DELETE_COMMENT, INIT_COMMENTS} from '../actions';
 
+const updateComments = (action, state, update) => {
+  const comment = action.payload;
+  const parentId = comment.parentId;
+  const comments = state[parentId]; 
+  const filteredComments = comments.filter((c) => c.id !== comment.id );
+  return update ? filteredComments.concat(comment) : filteredComments;
+}
+
 export default function(state = {}, action) {
    switch (action.type) {
-       case FETCH_COMMENTS:
+       case FETCH_COMMENTS: {
         const comments = action.payload;
         return {...state, [action.parentId]: comments};
-       case VOTE_COMMENT:
-        const commentId = action.payload.id;
-        const parentId = action.payload.parentId;
-        const newComment = action.payload;
-        const filterComents = state[parentId].filter((comment) => comment.id !== commentId ).concat(newComment);
-
-        return {...state, [parentId] : filterComents};        
-       case CREATE_COMMENT:
-        const pid = action.payload.parentId;
+       }
+       case VOTE_COMMENT: {
+        return {...state, [parentId] : updateComments(action, state, true)};  
+       }
+       case CREATE_COMMENT: {
         const comment = action.payload;
-        return {...state, [pid] : state[pid].concat(comment)};
-       case EDIT_COMMENT:
-        const comment2 = action.payload;
-        const filterComents3 = state[comment2.parentId].filter((comment) => comment.id !== comment2.id ).concat(comment2);
-        return {...state, [comment2.parentId] : filterComents3};        
-       case DELETE_COMMENT:
-        const cpid = action.parentId;
-        const filterComents2 = state[cpid].filter((comment) => comment.id !== action.payload );
-        return {...state, [cpid] : filterComents2};
-       case INIT_COMMENTS:
+        const parentId = comment.parentId;
+        return {...state, [parentId] : state[parentId].concat(comment)};
+       }
+       case EDIT_COMMENT: {
+        return {...state, [parentId] : updateComments(action, state, true)};  
+       }
+       case DELETE_COMMENT: {
+        return {...state, [parentId] : updateComments(action, state, false)};  
+       }
+       case INIT_COMMENTS: {
         console.log('init comments pid',action.pid)
-        return {...state, [action.pid] : []} 
+        return {...state, [action.pid] : []};
+       }
        default:
         return state;
    } 
