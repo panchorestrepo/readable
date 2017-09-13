@@ -41,7 +41,7 @@ class PostView extends Component {
 
     onEditComment(comment) {
         console.log("edit comment",comment);
-        this.props.history.push(`/comments/${comment.parentId}:${comment.id}`);
+        this.props.history.push(`/comments/${comment.parentId}/${comment.id}`);
     }
 
     render() {

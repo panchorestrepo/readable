@@ -78,7 +78,6 @@ function mapStateToProps(state, ownProps) {
  const posts = _.values(state.posts);
  posts.sort(sortBy(sortField));
  const options = state.categories.concat({key : 'all' , value: 'all', text : 'all'});
-// const category = state.selectedCategory;
  let category = ownProps.match.params.category;
  category = typeof category === 'undefined' ? 'all' : category;
  const filteredPost = posts.filter((post) =>  category === 'all' ? true : post.category === category );

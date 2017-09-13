@@ -29,22 +29,23 @@ class PostComment extends Component {
         );
     }  
     onSubmit(values) {
-        const comment = {
+        const {comment, parentId, createComment, editComment, history} = this.props;
+        const newComment = {
             ...values,
             id : guid(),
             timestamp : `${Date.now()}`,
-            parentId : this.props.parentId
+            parentId 
         }
 
-        const oldComment = this.props.comment;
+        const oldComment = comment;
         if (typeof oldComment === 'undefined') {
-            this.props.createComment(comment);
+            createComment(newComment);
         }
         else {
-            this.props.editComment({...comment, id : oldComment.id});
+            editComment({...newComment, id : oldComment.id});
         }
 
-        this.props.history.push(`/post/${this.props.parentId}`);
+        history.push(`/post/${parentId}`);
     }
     render() {
         const { handleSubmit, parentId, comment } = this.props;
@@ -84,10 +85,9 @@ function validate(values) {
 
 }
 function mapStateToProps(state, ownProps) {
-    const ids = ownProps.match.params.id;
-    const idsArray = ids.split(':');
-    const parentId  = idsArray[0];
-    const commentId = idsArray[1];
+    const commentId = ownProps.match.params.id;
+    const parentId = ownProps.match.params.parentId;
+
     const comment = state.comments[parentId].filter((c)=> c.id === commentId)[0];
     return {comment ,parentId};
 }

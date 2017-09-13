@@ -30,7 +30,8 @@ ReactDOM.render(
                 <Switch>
                     <Route path='/posts/category/:category' component={PostNew}/>
                     <Route path='/posts/:id' component={PostNew}/>
-                    <Route path='/comments/:id/' component={PostComment}/>
+                    <Route path='/comments/:parentId/:id/' component={PostComment}/>
+                    <Route path='/comments/:parentId/' component={PostComment}/>
                     <Route path='/:category/:id' component={PostView}/>
                     <Route path='/:category' component={RootView}/>
                     <Route path='/' component={RootView}/>
