@@ -2,13 +2,15 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchPosts, toggleSortPosts, deletePost, getCategories } from '../actions';
+import { deletePost } from '../actions/posts';
+import { toggleSortPosts } from '../actions/toggleSort';
+import getCategories from '../actions/categories'
 import moment from 'moment';
 import sortBy from "sort-by";
 import Vote from './vote';
 import AddSort from './add_sort';
-import { Container, Header, Segment, List, Dropdown } from 'semantic-ui-react';
-
+import { Container, Grid, Header, Segment, List, Dropdown } from 'semantic-ui-react';
+import { RenderLogoEntry } from '../util/Utils'
 class RootView extends Component {
 
   onClickToggleSort() {
@@ -37,7 +39,9 @@ class RootView extends Component {
     return (
       <Container>
         <Header >
-          <h2>Posts View</h2>
+          <Link to={'/'}>
+            <h2>Post View</h2>
+          </Link>
           <List horizontal>
               <List.Item>
                 <AddSort addPost={this.onClickAddPost.bind(this)} toggleSort={this.onClickToggleSort.bind(this)} sortField={sortField}/>
@@ -51,21 +55,31 @@ class RootView extends Component {
           <List divided relaxed>
             {posts.map( (post) => (
             <List.Item key={post.id}>
-              <List.Content>
-                <List.Header>
-                  <Link to={`/${post.category}/${post.id}`}>
-                    <span>{post['title']}</span>
-                  </Link>
-                </List.Header>
-                <List.Content>
-                  <small>{moment(parseInt(post['timestamp'],10)).calendar()}</small>
-                  <span className="col-sm"><small>Comments ({comments[post.id] ? comments[post.id].length : 0})</small></span>
-                  <span className="col-sm"  style={{color : 'black'}}>{post['category']}</span>
-                  <span style={{ float: 'right'}}>
-                    <Vote id={post.id}  type={"posts"} voteScore={post['voteScore']} />
-                  </span>
-                </List.Content>
-              </List.Content>
+                <Container>
+                    <Grid columns='equal' padded={false}>
+                      <Grid.Row>
+                        <Grid.Column>
+                          <Link to={`/${post.category}/${post.id}`}>
+                            <h3>{post.title}</h3>
+                          </Link>
+                        </Grid.Column>
+                      </Grid.Row> 
+                      <Grid.Row>
+                        <Grid.Column>
+                          <small>{moment(parseInt(post.timestamp,10)).calendar()}</small>
+                        </Grid.Column>                    
+                        <Grid.Column>
+                          <small>Comments ({comments[post.id] ? comments[post.id].length : 0})</small>
+                        </Grid.Column> 
+                        <Grid.Column>
+                          <RenderLogoEntry name={post.category}/>
+                        </Grid.Column> 
+                        <Grid.Column width={10} textAlign='right'>
+                          <Vote id={post.id}  type={"posts"} voteScore={post.voteScore} />
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
+                </Container>                    
             </List.Item>))}
           </List>
         </Segment> 
@@ -73,14 +87,13 @@ class RootView extends Component {
    );
   }
 }
-function mapStateToProps(state, ownProps) {
- const sortField = state.sortBy.posts;
- const posts = _.values(state.posts);
- posts.sort(sortBy(sortField));
- const options = state.categories.concat({key : 'all' , value: 'all', text : 'all'});
- let category = ownProps.match.params.category;
+function mapStateToProps({posts, comments, categories, sortCriteria }, {match : {params : {category}}}) {
+ const sortField = sortCriteria.posts;
+ const options = categories.concat({key : 'all' , value: 'all', text : 'all'});
  category = typeof category === 'undefined' ? 'all' : category;
- const filteredPost = posts.filter((post) =>  category === 'all' ? true : post.category === category );
- return { posts : filteredPost , comments : state.comments, sortField , options, category};
+ const filteredPost =  _.values(posts)
+                        .filter((post) =>  category === 'all' ? true : post.category === category )
+                        .sort(sortBy(sortField));
+ return { posts : filteredPost , comments, sortField , options, category};
 }
-export default connect(mapStateToProps,{ fetchPosts,toggleSortPosts, deletePost, getCategories })(RootView);
+export default connect(mapStateToProps,{ toggleSortPosts, deletePost, getCategories })(RootView);

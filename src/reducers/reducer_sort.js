@@ -1,4 +1,4 @@
-import { TOGGLE_SORT_POSTS, TOGGLE_SORT_COMMENTS  } from '../actions';
+import { TOGGLE_SORT_POSTS, TOGGLE_SORT_COMMENTS  } from '../actions/types';
 
 export const TIME_STAMP = "timestamp";
 export const VOTE_SCORE = "-voteScore";

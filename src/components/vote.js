@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { vote } from '../actions';
+import vote from '../actions/vote';
 import { Icon, Button } from 'semantic-ui-react'
 
 const Vote = ({ id, type, vote, voteScore }) => {
@@ -20,9 +20,8 @@ const Vote = ({ id, type, vote, voteScore }) => {
             </div>);
 }
 
-function mapStateToProps({ posts }, ownProps) {
-    console.log("mapStateToProps vote:",ownProps)
-    return { id : ownProps.id, type: ownProps.type, voteScore: ownProps.voteScore }
+function mapStateToProps({ posts }, {id, type, voteScore}) {
+    return { id , type, voteScore }
 }
 
 export default connect(mapStateToProps,{ vote })(Vote);

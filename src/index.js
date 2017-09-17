@@ -9,9 +9,10 @@ import reducer from './reducers/index'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import ReduxThunk from 'redux-thunk';
-
+import NotFound from './components/not_found';
 import registerServiceWorker from './registerServiceWorker';
-import { fetchPosts, getCategories } from './actions';
+import { fetchPosts } from './actions/posts';
+import getCategories from './actions/categories'
 
 //const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
@@ -35,6 +36,7 @@ ReactDOM.render(
                     <Route path='/:category/:id' component={PostView}/>
                     <Route path='/:category' component={RootView}/>
                     <Route path='/' component={RootView}/>
+                    <Route component={NotFound}/>
                 </Switch>
             </div>
         </BrowserRouter>

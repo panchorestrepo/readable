@@ -7,7 +7,7 @@ import CategoriesReducer from './reducer_categories';
 import ConfirmationStatus from './reducer_confirmation_status'
 
 const rootReducer = combineReducers({
-  sortBy : SortReducer,
+  sortCriteria : SortReducer,
   posts: PostsReducer,
   comments: CommentsReducer,
   categories: CategoriesReducer,

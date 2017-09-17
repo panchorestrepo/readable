@@ -2,13 +2,16 @@ import moment from 'moment';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import {toggleSortComments,deletePost, deleteComment } from '../actions';
+import { deletePost } from '../actions/posts';
+import { toggleSortComments } from '../actions/toggleSort';
+import { deleteComment } from '../actions/comments'
 import Vote from './vote';
 import sortBy from "sort-by";
 import AddSort from './add_sort';
 import EditDelete from './edit_delete';
-
-import { Container, Icon, Header, Segment, List } from 'semantic-ui-react';
+import { RenderLogoEntry } from '../util/Utils'
+import NotFound from '../components/not_found'
+import { Container, Grid, Icon, Header, Segment, List } from 'semantic-ui-react';
 
 class PostView extends Component {
 
@@ -45,10 +48,10 @@ class PostView extends Component {
     }
 
     render() {
-        const { post, sortField, comments } = this.props;
+        const { post, postsLoaded, sortField, comments } = this.props;
 
         if (!post) {
-            return <div>Loading...</div>
+            return postsLoaded ? <NotFound/> : <div>Loading...</div>;
         }
         comments.sort(sortBy(sortField));
         return (
@@ -59,15 +62,32 @@ class PostView extends Component {
             </h2>
             <div>
                 <Header attached='top'>
-                <span style={{float : 'left'}}>{post.author}  <small>{moment(parseInt(post.timestamp,10)).calendar()}</small>  {post.category}</span>
-                <span style={{float : 'right'}}>
-                    <EditDelete id={post.id} description={'Post'} deleteEntry={() => this.onDeleteClick(post)} editEntry={this.onEditPost.bind(this)}/>
-                </span>      
-                <h2>{post.title}</h2>
-                <span style={{ float: 'right'}}>
-                  <Vote id={post.id}  type={"posts"} voteScore={post.voteScore} />
-                </span>  
-                <h4>{post.body}</h4>
+                    <Container>
+                        <Grid columns='equal'>
+                            <Grid.Row>
+                                <Grid.Column width={3}>
+                                    <Icon name='user'/>{post.author}
+                                </Grid.Column>
+                                <Grid.Column width={2}>
+                                    <small>{moment(parseInt(post.timestamp,10)).calendar()}</small>
+                                </Grid.Column>                    
+                                <Grid.Column width={3}>
+                                    <RenderLogoEntry name={post.category}/>
+                                </Grid.Column> 
+                                <Grid.Column width={8} textAlign='right'>
+                                    <EditDelete id={post.id} description={'Post'} deleteEntry={() => this.onDeleteClick(post)} editEntry={this.onEditPost.bind(this)}/>
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column width={12}>
+                                    <h2>{post.title}</h2>
+                                </Grid.Column>
+                                <Grid.Column width={4} textAlign='right'>
+                                    <Vote id={post.id}  type={"posts"} voteScore={post.voteScore} />
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
+                    </Container>                     
                 </Header>
                 <Segment attached>
                     <h6>Comments ({comments ? comments.length : 0})</h6>
@@ -75,17 +95,27 @@ class PostView extends Component {
                     <List divided relaxed>
                     {comments.map( (comment) => (
                     <List.Item key={comment.id}>
-                        <List.Content>
-                            <span style={{float : 'left'}}>{comment.author}  <small>{moment(parseInt(comment.timestamp,10)).calendar()}</small></span>
-                            <span className="col-sm"  style={{color : 'black'}}>{comment.body}</span>
-                            <span style={{display : 'inline-block'}}>
-                                <EditDelete  id={comment.id} description={'Comment'} deleteEntry={() => this.onDeleteComment(comment)} editEntry={() => this.onEditComment(comment)}/>
-                            </span>
-                            <span style={{ float: 'right'}}>
-                                <Vote id={comment.id}  type={"comments"} voteScore={comment.voteScore} />
-                            </span>
-                        </List.Content>
-                        
+                        <Container>
+                            <Grid columns='equal'>
+                                <Grid.Row>
+                                    <Grid.Column width={2}>
+                                        <Icon name='user'/>{comment.author}
+                                    </Grid.Column>
+                                    <Grid.Column width={3}>
+                                        <small>{moment(parseInt(comment.timestamp,10)).calendar()}</small>
+                                    </Grid.Column>                    
+                                    <Grid.Column width={5}>
+                                        {comment.body}
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <EditDelete  id={comment.id} description={'Comment'} deleteEntry={() => this.onDeleteComment(comment)} editEntry={() =>     this.onEditComment(comment)}/>
+                                    </Grid.Column> 
+                                    <Grid.Column width={4} textAlign='right'>
+                                        <Vote id={comment.id}  type={"comments"} voteScore={comment.voteScore} />
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
+                        </Container>                        
                     </List.Item>))}
                     </List>                     
                 </Segment>
@@ -95,11 +125,9 @@ class PostView extends Component {
     }
 }
 
-function mapStateToProps(state, ownProps) {
-    console.log("mapStateToProps post show",state);
-    const id = ownProps.match.params.id;
-    const comments = typeof state.comments[id] === 'undefined' ? [] : state.comments[id];
-
-    return {post: state.posts[id], comments, sortField : state.sortBy.comments};
+function mapStateToProps({posts, comments, categories, sortCriteria}, {match : {params : {id}}}) {
+    const checkedComments = typeof comments[id] === 'undefined' ? [] : comments[id];
+    const postsLoaded = categories ? categories.length > 0 : false;
+    return {post: posts[id], comments : checkedComments, sortField : sortCriteria.comments, postsLoaded};
 }
 export default connect(mapStateToProps,{ toggleSortComments,deletePost, deleteComment })(PostView);

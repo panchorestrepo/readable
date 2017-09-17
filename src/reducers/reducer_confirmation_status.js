@@ -1,5 +1,5 @@
 
-import { CONFIRMATION_STATUS  } from '../actions';
+import { CONFIRMATION_STATUS  } from '../actions/types';
 
 
 export default function(state = {}, action) {

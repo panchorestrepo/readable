@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { createPost, editPost } from '../actions';
+import * as actions from '../actions/posts';
 import { guid } from '../util/Utils';
 import { Container, Segment, Dropdown } from 'semantic-ui-react'
 
@@ -77,7 +77,7 @@ class PostNew extends Component {
         }
         else {
             editPost({...newPost, id : oldPost.id});
-            history.push(`/post/${oldPost.id}`);
+            history.push(`/${newPost.category}/${oldPost.id}`);
         }
 
     }
@@ -110,7 +110,7 @@ class PostNew extends Component {
                             component={this.renderField}
                         />
                         <button type="submit" className="btn btn-primary">Save</button>
-                        <Link to={post ? `/post/${post.id}` : selectedCategory === 'all' ? '/' : `/${selectedCategory}`} className="btn btn-danger ">Cancel</Link>
+                        <Link to={post ? `/${post.category}/${post.id}` : selectedCategory === 'all' ? '/' : `/${selectedCategory}`} className="btn btn-danger ">Cancel</Link>
                     </form>
                 </Segment>
             </Container>
@@ -135,16 +135,12 @@ function validate(values) {
     return errors;
 
 }
-function mapStateToProps(state, ownProps) {
-    const id = ownProps.match.params.id;
-    let category = ownProps.match.params.category;
-    console.log('post new mapStateToProps id',id)
-    console.log('post new mapStateToProps category',category)
-    category = typeof category === 'undefined' ? 'all' : category;
-       
-    return {post : state.posts[id], options : state.categories, selectedCategory : category};
+function mapStateToProps({posts, categories}, {match : {params : {id, category}}}) {
+
+    const checkedCategory = typeof category === 'undefined' ? 'all' : category;
+    return {post : posts[id], options : categories, selectedCategory : checkedCategory};
 }
 export default reduxForm({
     validate,
     form: 'PostNewForm'
-})(connect(mapStateToProps,{ createPost, editPost })(PostNew));
+})(connect(mapStateToProps,actions)(PostNew));

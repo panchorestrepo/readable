@@ -1,4 +1,4 @@
-import { FETCH_COMMENTS, VOTE_COMMENT, CREATE_COMMENT, EDIT_COMMENT, DELETE_COMMENT, INIT_COMMENTS} from '../actions';
+import { FETCH_COMMENTS, VOTE_COMMENT, CREATE_COMMENT, EDIT_COMMENT, DELETE_COMMENT, INIT_COMMENTS} from '../actions/types';
 
 const updateComments = (action, state, update) => {
   const comment = action.payload;

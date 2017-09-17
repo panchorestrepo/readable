@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { createComment, editComment } from '../actions';
+import * as actions from '../actions/comments';
 import { guid } from '../util/Utils';
 import { Container, Segment } from 'semantic-ui-react';
 
@@ -84,15 +84,13 @@ function validate(values) {
     return errors;
 
 }
-function mapStateToProps(state, ownProps) {
-    const commentId = ownProps.match.params.id;
-    const parentId = ownProps.match.params.parentId;
+function mapStateToProps({ comments }, {match : {params : {commentId, parentId}}}) {
 
-    const comment = state.comments[parentId].filter((c)=> c.id === commentId)[0];
+    const comment = comments[parentId].filter((c)=> c.id === commentId)[0];
     return {comment ,parentId};
 }
 
 export default reduxForm({
     validate,
     form: 'CommentForm'
-})(connect(mapStateToProps,{ createComment, editComment })(PostComment));
+})(connect(mapStateToProps,actions)(PostComment));

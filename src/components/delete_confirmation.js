@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon, Button, Modal } from 'semantic-ui-react'
 import { connect } from 'react-redux';
-import { setConfirmationStatus } from '../actions'
+import setConfirmationStatus from '../actions/confirmation'
 import '../App.css';
 
   const DeleteConfirmation = ({setConfirmationStatus, open, id, description, onClick}) => {
@@ -31,9 +31,7 @@ import '../App.css';
     )
 }
 
-function mapStateToProps({ confirmationStatus},ownProps ) {
-  console.log("mapStateToProps DeleteConfirmation:",confirmationStatus,ownProps)
-  const { id, description } = ownProps;
+function mapStateToProps({ confirmationStatus},{ id, description } ) {
   const key = `${description}@${id}`;
   return { open : confirmationStatus[key] }
 }
