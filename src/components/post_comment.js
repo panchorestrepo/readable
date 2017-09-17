@@ -84,9 +84,9 @@ function validate(values) {
     return errors;
 
 }
-function mapStateToProps({ comments }, {match : {params : {commentId, parentId}}}) {
+function mapStateToProps({ comments }, {match : {params : {id, parentId}}}) {
 
-    const comment = comments[parentId].filter((c)=> c.id === commentId)[0];
+    const comment = comments[parentId].filter((c)=> c.id === id)[0];
     return {comment ,parentId};
 }
 
