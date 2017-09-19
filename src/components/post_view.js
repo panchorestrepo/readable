@@ -78,12 +78,18 @@ class PostView extends Component {
                                     <EditDelete id={post.id} description={'Post'} deleteEntry={() => this.onDeleteClick(post)} editEntry={this.onEditPost.bind(this)}/>
                                 </Grid.Column>
                             </Grid.Row>
+
                             <Grid.Row>
                                 <Grid.Column width={12}>
                                     <h2>{post.title}</h2>
                                 </Grid.Column>
                                 <Grid.Column width={4} textAlign='right'>
                                     <Vote id={post.id}  type={"posts"} voteScore={post.voteScore} />
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column>
+                                    <h3>{post.body}</h3>
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>
