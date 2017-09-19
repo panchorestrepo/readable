@@ -89,7 +89,7 @@ class PostView extends Component {
                             </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column>
-                                    <h3>{post.body}</h3>
+                                    <h4>{post.body}</h4>
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>
